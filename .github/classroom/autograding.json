@@ -2,8 +2,8 @@
   "tests": [
     {
       "name": "Setup",
-      "setup": "!rm tests/dados/estudantes.bin",
-      "run": "cmake -B build; cd build; make",
+      "setup": "rm tests/dados/estudantes.bin",
+      "run": "cmake -B build; cd  build; make",
       "input": "",
       "output": "",
       "comparison": "included",
