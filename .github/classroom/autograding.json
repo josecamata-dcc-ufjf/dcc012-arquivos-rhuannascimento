@@ -2,8 +2,8 @@
   "tests": [
     {
       "name": "Setup",
-      "setup": "rm tests/dados/estudantes.bin",
-      "run": "cmake -B build; cd  build; make",
+      "setup": "cmake -B build",
+      "run": "cmake --build build",
       "input": "",
       "output": "",
       "comparison": "included",
@@ -19,6 +19,16 @@
       "comparison": "included",
       "timeout": 10,
       "points": 1
+    },
+    {
+      "name": "Clean",
+      "setup": "rm -rf build",
+      "run": "rm tests/data/estudantes.bin",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 0
     }
   ]
 }
