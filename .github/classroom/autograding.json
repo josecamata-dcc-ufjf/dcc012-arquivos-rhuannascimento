@@ -12,8 +12,8 @@
     },
     {
       "name": "CTest",
-      "setup": "cd build",
-      "run": "ctest",
+      "setup": "",
+      "run": "cd build && ctest",
       "input": "",
       "output": "",
       "comparison": "included",
