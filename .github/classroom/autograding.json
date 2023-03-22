@@ -12,7 +12,7 @@
     },
     {
       "name": "CTest",
-      "setup": "",
+      "setup": "cd build",
       "run": "ctest",
       "input": "",
       "output": "",
