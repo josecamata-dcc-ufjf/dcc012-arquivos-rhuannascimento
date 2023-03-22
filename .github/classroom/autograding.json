@@ -2,7 +2,7 @@
   "tests": [
     {
       "name": "Setup",
-      "setup": "cmake -B build",
+      "setup": "rm -f tests/data/estudantes.bin && cmake -B build",
       "run": "cmake --build build",
       "input": "",
       "output": "",
@@ -23,7 +23,7 @@
     {
       "name": "Clean",
       "setup": "rm -rf build",
-      "run": "rm tests/data/estudantes.bin",
+      "run": "rm -f tests/data/estudantes.bin",
       "input": "",
       "output": "",
       "comparison": "included",
