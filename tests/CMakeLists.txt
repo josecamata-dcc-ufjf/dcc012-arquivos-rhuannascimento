@@ -16,3 +16,9 @@ target_link_libraries(test5 PUBLIC siga)
 
 add_executable(test6 test6.cc)
 target_link_libraries(test6 PUBLIC siga)
+
+set_tests_properties(test2 PROPERTIES DEPENDS "test1")
+set_tests_properties(test3 PROPERTIES DEPENDS "test2")
+set_tests_properties(test4 PROPERTIES DEPENDS "test3")
+set_tests_properties(test5 PROPERTIES DEPENDS "test4")
+set_tests_properties(test6 PROPERTIES DEPENDS "test5")
