@@ -177,14 +177,42 @@ void Siga::SalvaCSV(string arquivo_csv)
     // TODO: implementar salvamento de arquivo CSV
     // Passos:
     // Abrir arquivo CSV
+    ofstream csv_file;
+    
+    csv_file.open(arquivo_csv_path);
+
     // Escrever cabeçalho
+    csv_file.write("Nome, MAtricula, AnoIngresso, IRA", sizeof("Nome, MAtricula, AnoIngresso, IRA"));
+
     // Posicione o cursor para o inicio do arquivo binário
+    this->file_stream.seekg(0, this->file_stream.beg);
+
+    string line;
     // Para cada linha de dados
+    while(getline(file_stream, line))
+    {
     //    Ler um estudante do arquivo binário
+    Estudante est;
+    this->file_stream.read((char *)&est, sizeof(Estudante));
+
     //    Escrever o objeto estudante no arquivo CSV
+    csv_file.write((char *)est.ObterNome(), sizeof(est.ObterNome()));
+    csv_file.write(", ", sizeof(", "));
+    string matricula(std::to_string(est.ObterMatricula()));
+    csv_file.write((char *)&matricula, sizeof(matricula));
+    csv_file.write(", ", sizeof(", "));
+    string ano(std::to_string(est.ObterAnoIngresso()));
+    csv_file.write((char *)&ano, sizeof(ano));
+    csv_file.write(", ", sizeof(", "));
+    string ira(std::to_string(est.ObterIRA()));
+    csv_file.write((char *)&ira, sizeof(ira));
+    csv_file.write("\n", sizeof("\n"));
+
+    }
     // Fim-Para
+
     // Fechar arquivo CSV
-   
+    csv_file.close();
 }
         
         
@@ -193,8 +221,11 @@ void Siga::AlteraCadastroEstudante(int idx, Estudante est)
     // TODO: implementar alteração de cadastro de estudante
     // Passos:
     // Posicione o cursor para o inicio do arquivo
+    this->file_stream.seekg(0, this->file_stream.beg);
     // Posicione o cursor para a posição idx
+    this->file_stream.seekg(idx, this->file_stream.beg);
     // Escreva o estudante na posição idx
+    this->file_stream.write((char *)&est, sizeof(Estudante));
     // Saia da função
 }
         
