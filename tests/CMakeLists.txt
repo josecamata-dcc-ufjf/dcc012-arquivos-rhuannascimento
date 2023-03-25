@@ -16,3 +16,4 @@ target_link_libraries(test5 PUBLIC siga)
 
 add_executable(test6 test6.cc)
 target_link_libraries(test6 PUBLIC siga)
+
