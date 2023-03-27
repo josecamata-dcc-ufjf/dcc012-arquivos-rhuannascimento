@@ -175,9 +175,7 @@ void Siga::SalvaCSV(string arquivo_csv)
 {
     string arquivo_csv_path = INPUT_DATA_DIR+arquivo_csv;
     // TODO: implementar salvamento de arquivo CSV
-    // Passos:
-    // Abrir arquivo CSV
-    // abrir arquivo TXT para escrever nele
+    
     ofstream outFile;
     outFile.open("arquivo_csv", ios::out);
     if(!outFile.is_open())
@@ -186,24 +184,16 @@ void Siga::SalvaCSV(string arquivo_csv)
         return;
     }
 
-    // escrevendo cabecalho ??
     outFile << "Nome", "Matricula", "Ano", "Ira /n";
 
-
-
-    // inicio do arquivo
     this->file_stream.seekg(0, this->file_stream.beg);
 
-    // inicio
     int max = this->ObterNumeroEstudantes();
     for(int index =0; index< max; index++){
-        //leitura binaria
+       
         Estudante est;
         LeiaEstudante(index, est);
 
-        //escrita no CSV(txt)
-        /* Atributos
-        int ObterMatricula(); int ObterAnoIngresso(); const char* ObterNome(); float ObterIRA(); */
         outFile << est.ObterMatricula();
         outFile << ", ";
         outFile << est.ObterAnoIngresso();
@@ -212,9 +202,8 @@ void Siga::SalvaCSV(string arquivo_csv)
         outFile << ", ";
         outFile << est.ObterIRA();
         outFile << ", /n";
-    } // fim
+    } 
 
-    //fecha
     outFile.close();
 }
         
@@ -226,7 +215,7 @@ void Siga::AlteraCadastroEstudante(int idx, Estudante est)
     // Posicione o cursor para o inicio do arquivo
     this->file_stream.seekg(0, this->file_stream.beg);
     // Posicione o cursor para a posição idx
-    this->file_stream.seekg(idx, this->file_stream.beg);
+    this->file_stream.seekg(idx * sizeof(Estudante), this->file_stream.beg);
     // Escreva o estudante na posição idx
     this->file_stream.write((char *)&est, sizeof(Estudante));
     // Saia da função
