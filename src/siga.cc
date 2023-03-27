@@ -177,42 +177,45 @@ void Siga::SalvaCSV(string arquivo_csv)
     // TODO: implementar salvamento de arquivo CSV
     // Passos:
     // Abrir arquivo CSV
-    ofstream csv_file;
-    
-    csv_file.open(arquivo_csv_path);
+    // abrir arquivo TXT para escrever nele
+    ofstream outFile;
+    outFile.open("arquivo_csv", ios::out);
+    if(!outFile.is_open())
+    {
+        cout << "Erro ao abrir arquivo CSV" << endl;
+        return;
+    }
 
-    // Escrever cabeçalho
-    csv_file.write("Nome, MAtricula, AnoIngresso, IRA", sizeof("Nome, MAtricula, AnoIngresso, IRA"));
+    // escrevendo cabecalho ??
+    outFile << "Nome", "Matricula", "Ano", "Ira /n";
 
-    // Posicione o cursor para o inicio do arquivo binário
+
+
+    // inicio do arquivo
     this->file_stream.seekg(0, this->file_stream.beg);
 
-    string line;
-    // Para cada linha de dados
-    while(getline(file_stream, line))
-    {
-    //    Ler um estudante do arquivo binário
-    Estudante est;
-    this->file_stream.read((char *)&est, sizeof(Estudante));
+    // inicio
+    int max = this->ObterNumeroEstudantes();
+    for(int index =0; index< max; index++){
+        //leitura binaria
+        Estudante est;
+        LeiaEstudante(index, est);
 
-    //    Escrever o objeto estudante no arquivo CSV
-    csv_file.write((char *)est.ObterNome(), sizeof(est.ObterNome()));
-    csv_file.write(", ", sizeof(", "));
-    string matricula(std::to_string(est.ObterMatricula()));
-    csv_file.write((char *)&matricula, sizeof(matricula));
-    csv_file.write(", ", sizeof(", "));
-    string ano(std::to_string(est.ObterAnoIngresso()));
-    csv_file.write((char *)&ano, sizeof(ano));
-    csv_file.write(", ", sizeof(", "));
-    string ira(std::to_string(est.ObterIRA()));
-    csv_file.write((char *)&ira, sizeof(ira));
-    csv_file.write("\n", sizeof("\n"));
+        //escrita no CSV(txt)
+        /* Atributos
+        int ObterMatricula(); int ObterAnoIngresso(); const char* ObterNome(); float ObterIRA(); */
+        outFile << est.ObterMatricula();
+        outFile << ", ";
+        outFile << est.ObterAnoIngresso();
+        outFile << ", ";
+        outFile << est.ObterNome();
+        outFile << ", ";
+        outFile << est.ObterIRA();
+        outFile << ", /n";
+    } // fim
 
-    }
-    // Fim-Para
-
-    // Fechar arquivo CSV
-    csv_file.close();
+    //fecha
+    outFile.close();
 }
         
         
