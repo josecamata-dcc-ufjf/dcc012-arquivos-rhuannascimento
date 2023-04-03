@@ -106,12 +106,31 @@ int  Siga::PesquisaPorMatricula(int matricula)
 {
     // TODO: implementar pesquisa por matrícula
     // Posicione o cursor para o inicio do arquivo:
-    // Para i = 0 até n_estudante
-    //    Ler estudante na posição corrente no arquivo
-    //    Testar se é a matricula procurada, se afirmativo
-    //    retorne a posiçao i.
+    this->file_stream.seekg(0, this->file_stream.beg);
+
+    // Para i = 0 até n_estudante   
+    for(int i=0; i<this->n_estudantes; i++){
+
+        Estudante est;
+
+        //    Ler estudante na posição corrente no arquivo
+        this->file_stream.read((char *)&est, sizeof(Estudante));
+
+        //    Testar se é a matricula procurada, se afirmativo
+        if(est.ObterMatricula() == matricula){
+            
+            // Coloque o cursor para o final do arquivo
+            this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.beg);
+            
+            //    retorne a posiçao i.
+            return i;
+        }
+    }
     // Fim-Para
+    
     // Coloque o cursor para o final do arquivo
+    this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.beg);
+    
     // retorne -1
     return -1;
 }
@@ -121,10 +140,18 @@ void Siga::AdicionaEstudante(Estudante est)
     // TODO: Implementar cadastro de estudante
     // Passos:
     // Testar se est já foi cadastrado
-    // Se já cadastrado, retorne sem fazer nada   
-    // Caso Contrário, adicione o estudante no final do arquivobinário
-    // e incremente o numero de estudantes
-    
+
+    if(PesquisaPorMatricula(est.ObterMatricula())==-1){
+
+        // Caso Contrário, adicione o estudante no final do arquivobinário
+        this->file_stream.write((char *)&est, sizeof(Estudante));
+
+        // e incremente o numero de estudantes
+        this->n_estudantes = this->n_estudantes+1;
+
+    }
+
+    // Se já cadastrado, retorne sem fazer nada    
 }
   
 Estudante Siga::ObterEstudante(int idx)
@@ -132,8 +159,14 @@ Estudante Siga::ObterEstudante(int idx)
     Estudante est;
     // TODO: implementar obter estudante
     // Posicione o cursor para o inicio do arquivo
+    this->file_stream.seekg(0, this->file_stream.beg);
+
     // Posicione o cursor para a posição idx
+    this->file_stream.seekg(idx, this->file_stream.beg);
+
     // Leia o estudante na posição idx
+    LeiaEstudante(idx, est);
+
     // Retorne o estudante
     return est;
 }
@@ -142,16 +175,36 @@ void Siga::SalvaCSV(string arquivo_csv)
 {
     string arquivo_csv_path = INPUT_DATA_DIR+arquivo_csv;
     // TODO: implementar salvamento de arquivo CSV
-    // Passos:
-    // Abrir arquivo CSV
-    // Escrever cabeçalho
-    // Posicione o cursor para o inicio do arquivo binário
-    // Para cada linha de dados
-    //    Ler um estudante do arquivo binário
-    //    Escrever o objeto estudante no arquivo CSV
-    // Fim-Para
-    // Fechar arquivo CSV
-   
+    
+    ofstream outFile;
+    outFile.open(arquivo_csv_path);
+    if(!outFile.is_open())
+    {
+        cout << "Erro ao abrir arquivo CSV" << endl;
+        return;
+    }
+
+    outFile << "Nome", "Matricula", "Ano", "Ira /n";
+
+    this->file_stream.seekg(0, this->file_stream.beg);
+
+    int max = this->ObterNumeroEstudantes();
+    for(int index =0; index< max; index++){
+       
+        Estudante est;
+        LeiaEstudante(index, est);
+
+        outFile << est.ObterMatricula();
+        outFile << ", ";
+        outFile << est.ObterAnoIngresso();
+        outFile << ", ";
+        outFile << est.ObterNome();
+        outFile << ", ";
+        outFile << est.ObterIRA();
+        outFile << ", /n";
+    } 
+
+    outFile.close();
 }
         
         
@@ -160,8 +213,11 @@ void Siga::AlteraCadastroEstudante(int idx, Estudante est)
     // TODO: implementar alteração de cadastro de estudante
     // Passos:
     // Posicione o cursor para o inicio do arquivo
+    this->file_stream.seekg(0, this->file_stream.beg);
     // Posicione o cursor para a posição idx
+    this->file_stream.seekg(idx * sizeof(Estudante), this->file_stream.beg);
     // Escreva o estudante na posição idx
+    this->file_stream.write((char *)&est, sizeof(Estudante));
     // Saia da função
 }
         

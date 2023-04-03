@@ -2,8 +2,8 @@
   "tests": [
     {
       "name": "Setup",
-      "setup": "",
-      "run": "cmake -B build; cd build; make",
+      "setup": "rm -f tests/data/estudantes.bin && cmake -B build",
+      "run": "cmake --build build",
       "input": "",
       "output": "",
       "comparison": "included",
@@ -13,12 +13,22 @@
     {
       "name": "CTest",
       "setup": "",
-      "run": "ctest",
+      "run": "cd build && ctest",
       "input": "",
       "output": "",
       "comparison": "included",
       "timeout": 10,
       "points": 1
+    },
+    {
+      "name": "Clean",
+      "setup": "rm -rf build",
+      "run": "rm -f tests/data/estudantes.bin",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 0
     }
   ]
 }
